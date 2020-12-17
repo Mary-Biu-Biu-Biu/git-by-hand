@@ -1,7 +1,7 @@
 // 用于写入文件
 const fs = require('fs')
-const path = require('path')
 const constants = require('./constants')
+const fileUtils = require('./utils/fileUtils')
 
 // 用于初始化一个git仓库
 // =》 在当前文件夹中生成git项目的文件夹沟
@@ -14,7 +14,6 @@ function init() {
         }
     })
 
-    fs.mkdir(constants.gitmary + '/objects', () => {})
     const structure = {
         // 文件：指向用于记录当前分支的文件地址（里面存放最近一次该分支的提交）
         // =》此时初始化为默认的master分支
@@ -34,7 +33,9 @@ function init() {
         config: JSON.stringify({ core: { bare: false } }, null, 4),
     }
 
-    // files.writeFilesFromTree({ '.gitmary': structure }, process.cwd())
+    // 从当前目录开始写入文件夹结构
+    fileUtils.writeFilesFromStructure({ '.gitmary': structure }, process.cwd())
+    console.log('gitmary初始化已完成')
 }
 
 module.exports.init = init

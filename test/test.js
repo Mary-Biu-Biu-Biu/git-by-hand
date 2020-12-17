@@ -1,6 +1,6 @@
 const gitmary = require('../gitmary/gitmary')
 
-// gitmary.init()
+gitmary.init()
 
 var fs = require('fs')
 // fs.stat('.git', function (error, stats) {
@@ -14,10 +14,3 @@ var fs = require('fs')
 //         console.log('目录：' + stats.isDirectory())
 //     }
 // })
-
-fs.mkdir('.gitmary/test', function (error, stats) {
-    if (error) {
-        console.log(error)
-        return false
-    }
-})
