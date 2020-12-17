@@ -1,2 +1,2 @@
 # git-by-hand
- implement git via JavaScript
+ implement gitmary(git) via JavaScript
