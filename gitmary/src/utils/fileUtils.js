@@ -28,7 +28,41 @@ function writeFilesFromStructure(structure, prefix) {
     })
 }
 
+// 用于找到当前目录下的所有文件
+function allFilesUnderPath(filepath) {
+    // 存放所有文件路径的列表
+    let result = []
+
+    function recurCheck(filepath) {
+        // 如果当前路径不存在，直接跳过
+        if (!fs.existsSync(filepath)) {
+            console.error("'" + filepath + "' is not a file")
+            return
+        }
+        // 当前路径是文件，则放入列表中
+        else if (fs.statSync(filepath).isFile()) {
+            result.push(filepath)
+            return
+        }
+        // 如果当前路径是文件夹，则迭代
+        else if (fs.statSync(filepath).isDirectory()) {
+            fs.readdirSync(filepath).forEach((item) => {
+                recurCheck(path.join(filepath, item))
+            })
+        }
+    }
+
+    recurCheck(filepath)
+    return result
+}
+
+function getGitMaryPath() {
+    return path.join(process.cwd(), '.gitmary')
+}
+
 module.exports = {
     // 用于创建文件结构
     writeFilesFromStructure: writeFilesFromStructure,
+    allFilesUnderPath: allFilesUnderPath,
+    getGitMaryPath: getGitMaryPath,
 }
