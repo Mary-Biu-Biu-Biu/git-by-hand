@@ -1,27 +1,35 @@
 const fileUtils = require('./fileUtils')
 const path = require('path')
+const fs = require('fs')
 
-// 对目标文件添加索引
-function addIndex(paths) {
-    let allIndex = getAllIndex()
+function updateIndex(filepath, option) {
+    switch (option) {
+        case 'add':
+            // 根据绝对路径，读取文本内容
+            let content = fileUtils.readFile(
+                fileUtils.getAbsolutePathFromRoot(filepath)
+            )
 
-    paths.forEach((path) => {})
+            // 新文件的状态肯定是不会conflict的，因此创建没有conflict的index
+            writeNonConflict(filepath, content)
+            break
 
-    // 单文件
-    index.writeNonConflict(path, files.read(files.workingCopyPath(path)))
+        default:
+            throw new Error('invalid option')
+    }
 }
 
 // 创建单独的文件路径（没有conflict意味着状态码=0）
-function writeNonConflict(path, content) {
+function writeNonConflict(filepath, content) {
     // 删除当前文件所有可能的index
-    index.deleteIndex(path)
+    deleteIndex(filepath)
 
-    //
-    index._writeStageEntry(path, 0, content)
+    // 对文件创建状态=0的index
+    writeIndexWithStatus(filepath, 0, content)
 }
 
 // 删掉目标文件的所有相关索引
-function deleteIndex(path) {
+function deleteIndex(filepath) {
     // 获取index文件中存储的全部index
     let index = getAllIndex()
 
@@ -30,26 +38,38 @@ function deleteIndex(path) {
 
     // 删掉index中该文件对应的所有状态码的key+value
     status.forEach((state) => {
-        delete index[path + ',' + state]
+        delete index[filepath + ',' + state]
     })
 
     // 更新index文件内容
-    writeToIndex(idx)
+    writeToIndexFile(index)
+}
+
+// 根据状态码写入index
+function writeIndexWithStatus(filepath, status, content) {
+    let index = getAllIndex()
+    index[filepath + ',' + status] = content
 }
 
 // 把index文件中的内容作为一个JS对象返回
 function getAllIndex() {
     // 获取.gitmary文件夹中的index文件
-    var indexFilePath = path.join(fileUtils.getGitMaryPath(), 'index')
+    var indexFilePath = path.join(
+        fileUtils.getAbsolutePathFromGitMary(),
+        'index'
+    )
 
-    // 获取index文件中的内容，
-    return util
-        .lines(fs.existsSync(indexFilePath) ? files.read(indexFilePath) : '\n')
-        .reduce(function (idx, blobStr) {
-            var blobData = blobStr.split(/ /)
-            idx[index.key(blobData[0], blobData[1])] = blobData[2]
-            return idx
-        }, {})
+    // 把index中存储的文本内容，通过换行符转换成array
+    let indexlines = textToLines(
+        fs.existsSync(indexFilePath) ? fileUtils.readFile(indexFilePath) : '\n'
+    )
+
+    // 对每一行进行拆分，并构成index中的key+value
+    return indexlines.reduce((index, line) => {
+        var lineData = line.split(/ /)
+        index[lineData[0] + ',' + lineData[1]] = lineData[2]
+        return index
+    }, {})
 }
 
 // 把文件中的文本转换成数组（通过换行划分元素）
@@ -58,28 +78,47 @@ function textToLines(str) {
     let lines = str.split('\n')
 
     // 过滤掉空行
-    lines = arr.filter((line) => line !== '')
+    lines = lines.filter((line) => line !== '')
     return lines
 }
 
 // 把json格式的index转换文本，并写入index文件
-function writeToIndex(index) {
+function writeToIndexFile(index) {
     // 获取对象中所有的key
     let files = Object.keys(index)
 
     // 文件名 + 空格 + 状态 + 空格 + 内容
-    let content = files.map((key) => {
-        return key.split(',')[0] + ' ' + key.split(',')[1] + ' ' + index[key]
-    })
+    // 并把每一个元素合并在一起，用换行符隔开
+    let content =
+        files
+            .map((key) => {
+                return (
+                    key.split(',')[0] +
+                    ' ' +
+                    key.split(',')[1] +
+                    ' ' +
+                    index[key]
+                )
+            })
+            .join('\n') + '\n'
+    console.log('content: ' + content)
 
     // 写入index文件中
-    fileUtils.write(path.join(fileUtils.getGitMaryPath, 'index'), content)
+    // fileUtils.writeSingleFile(
+    //     path.join(fileUtils.getAbsolutePathFromGitMary(), 'index'),
+    //     content
+    // )
+    fs.writeFileSync(
+        path.join(fileUtils.getAbsolutePathFromGitMary(), 'index'),
+        content
+    )
 }
 
 module.exports = {
     // 用于创建文件结构
     textToLines: textToLines,
     getAllIndex: getAllIndex,
-    writeToIndex: writeToIndex,
+    writeToIndexFile: writeToIndexFile,
     deleteIndex: deleteIndex,
+    updateIndex: updateIndex,
 }
