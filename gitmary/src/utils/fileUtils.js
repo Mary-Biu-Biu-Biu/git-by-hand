@@ -5,7 +5,6 @@ const path = require('path')
 // 用于创建文件结构
 function writeFilesFromStructure(structure, prefix) {
     // 循环当前structure中所有的key
-    console.log(structure)
     Object.keys(structure).forEach((key) => {
         // 并把key添加到路径中
         let currentPath = path.join(prefix, key)

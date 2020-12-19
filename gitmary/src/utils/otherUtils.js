@@ -1,12 +1,15 @@
-function hash(refOrHash) {
-    if (objects.exists(refOrHash)) {
-        return refOrHash
-    } else {
-        var terminalRef = refs.terminalRef(refOrHash)
-        if (terminalRef === 'FETCH_HEAD') {
-            return refs.fetchHeadBranchToMerge(refs.headBranchName())
-        } else if (refs.exists(terminalRef)) {
-            return files.read(files.gitletPath(terminalRef))
-        }
+function createHash(string) {
+    let hashInt = 0
+    // 循环字符
+    for (var i = 0; i < string.length; i++) {
+        hashInt = hashInt * 31 + string.charCodeAt(i)
+        // “|” 是位运算操作符。
+        hashInt = hashInt | 0
     }
+
+    return Math.abs(hashInt).toString(16)
+}
+
+module.exports = {
+    createHash: createHash,
 }

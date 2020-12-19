@@ -9,7 +9,6 @@ function init() {
     // 检查初始化文件夹是否已经存在
     fs.stat(constants.gitmary, function (error, stats) {
         if (!error && stats.isDirectory()) {
-            console.error('该文件夹已经是一个gitmary仓库了')
             return false
         }
     })

@@ -1,6 +1,7 @@
 const fileUtils = require('./fileUtils')
 const path = require('path')
 const fs = require('fs')
+const objectUtils = require('./objectUtils')
 
 function updateIndex(filepath, option) {
     switch (option) {
@@ -47,8 +48,12 @@ function deleteIndex(filepath) {
 
 // 根据状态码写入index
 function writeIndexWithStatus(filepath, status, content) {
+    // 获取当前index对象
     let index = getAllIndex()
-    index[filepath + ',' + status] = content
+    // 更新目标文件+状态的hash（同时更新obejcts中的内容）
+    index[filepath + ',' + status] = objectUtils.saveObject(content)
+    // 保存新的index到index文件
+    writeToIndexFile(index)
 }
 
 // 把index文件中的内容作为一个JS对象返回
@@ -101,7 +106,6 @@ function writeToIndexFile(index) {
                 )
             })
             .join('\n') + '\n'
-    console.log('content: ' + content)
 
     // 写入index文件中
     // fileUtils.writeSingleFile(
