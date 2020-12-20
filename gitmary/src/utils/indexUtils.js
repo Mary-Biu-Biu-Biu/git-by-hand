@@ -14,6 +14,11 @@ function updateIndex(filepath, option) {
             // 新文件的状态肯定是不会conflict的，因此创建没有conflict的index
             writeNonConflict(filepath, content)
             break
+        case 'rm':
+            // 删除该文件的所有可能的状态+对应的索引
+            // 并重新写入index文件
+            deleteIndex(filepath)
+            break
 
         default:
             throw new Error('invalid option')
@@ -38,6 +43,7 @@ function deleteIndex(filepath) {
     let status = [0, 1, 2, 3]
 
     // 删掉index中该文件对应的所有状态码的key+value
+    // 并保存所有被删除的hash value到数组中
     status.forEach((state) => {
         delete index[filepath + ',' + state]
     })
@@ -50,8 +56,10 @@ function deleteIndex(filepath) {
 function writeIndexWithStatus(filepath, status, content) {
     // 获取当前index对象
     let index = getAllIndex()
+
     // 更新目标文件+状态的hash（同时更新obejcts中的内容）
     index[filepath + ',' + status] = objectUtils.saveObject(content)
+
     // 保存新的index到index文件
     writeToIndexFile(index)
 }
@@ -107,11 +115,6 @@ function writeToIndexFile(index) {
             })
             .join('\n') + '\n'
 
-    // 写入index文件中
-    // fileUtils.writeSingleFile(
-    //     path.join(fileUtils.getAbsolutePathFromGitMary(), 'index'),
-    //     content
-    // )
     fs.writeFileSync(
         path.join(fileUtils.getAbsolutePathFromGitMary(), 'index'),
         content

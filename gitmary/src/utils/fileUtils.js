@@ -96,6 +96,15 @@ function writeSingleFile(filepath, content) {
     writeFilesFromStructure(structure, '/')
 }
 
+// 删除所有文件
+function deleteFiles(filePaths) {
+    filePaths.forEach((filepath) => {
+        if (fs.existsSync(filepath)) {
+            fs.unlinkSync(filepath)
+        }
+    })
+}
+
 module.exports = {
     // 用于创建文件结构
     writeFilesFromStructure: writeFilesFromStructure,
@@ -104,4 +113,5 @@ module.exports = {
     getAbsolutePathFromRoot: getAbsolutePathFromRoot,
     readFile: readFile,
     writeSingleFile: writeSingleFile,
+    deleteFiles: deleteFiles,
 }

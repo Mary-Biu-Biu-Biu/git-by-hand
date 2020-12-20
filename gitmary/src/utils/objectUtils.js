@@ -17,7 +17,7 @@ function saveObject(content) {
     // 在objects中创建该hash的文件，并把文本写入到hash文件中
     fs.writeFileSync(objectPath, content)
 
-    // 返回创建好的hashss
+    // 返回创建好的hash
     return hash
 }
 

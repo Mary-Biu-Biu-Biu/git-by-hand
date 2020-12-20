@@ -1,6 +1,5 @@
 // 用于写入文件
 const fs = require('fs')
-const constants = require('./constants')
 const fileUtils = require('./utils/fileUtils')
 const indexUtils = require('./utils/indexUtils')
 
@@ -16,6 +15,6 @@ module.exports.add = (filepath) => {
             indexUtils.updateIndex(path, 'add')
         })
     } else {
-        throw new Error('invalid path: no files to add')
+        throw new Error('invalid path: no file to add')
     }
 }
