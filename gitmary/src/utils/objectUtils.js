@@ -4,7 +4,7 @@ const fileUtils = require('./fileUtils')
 const otherUtils = require('./otherUtils')
 
 function saveObject(content) {
-    // 获取文本对应的hash
+    // 根据文本，计算出对应的hash
     const hash = otherUtils.createHash(content)
 
     // 获取objects目录中该hash的路径
@@ -21,6 +21,13 @@ function saveObject(content) {
     return hash
 }
 
+function existHash(hash) {
+    return fs.existsSync(
+        path.join(fileUtils.getAbsolutePathFromGitMary(), 'objects', hash)
+    )
+}
+
 module.exports = {
     saveObject: saveObject,
+    existHash: existHash,
 }

@@ -65,9 +65,9 @@ function writeIndexWithStatus(filepath, status, content) {
 }
 
 // 把index文件中的内容作为一个JS对象返回
-function getAllIndex() {
+function getAllIndex(withStatus = true) {
     // 获取.gitmary文件夹中的index文件
-    var indexFilePath = path.join(
+    let indexFilePath = path.join(
         fileUtils.getAbsolutePathFromGitMary(),
         'index'
     )
@@ -77,10 +77,11 @@ function getAllIndex() {
         fs.existsSync(indexFilePath) ? fileUtils.readFile(indexFilePath) : '\n'
     )
 
-    // 对每一行进行拆分，并构成index中的key+value
+    // 对每一行进行拆分，并构成index中的key + value
     return indexlines.reduce((index, line) => {
-        var lineData = line.split(/ /)
-        index[lineData[0] + ',' + lineData[1]] = lineData[2]
+        let lineData = line.split(/ /)
+        let key = withStatus ? lineData[0] + ',' + lineData[1] : lineData[0]
+        index[key] = lineData[2]
         return index
     }, {})
 }

@@ -74,6 +74,7 @@ function readFile(filepath) {
         // 返回文件内容
         return fs.readFileSync(filepath, 'utf8')
     }
+    return ''
 }
 
 function writeSingleFile(filepath, content) {

@@ -2,10 +2,11 @@ const fileUtils = require('./fileUtils')
 const path = require('path')
 const fs = require('fs')
 const otherUtils = require('./otherUtils')
+const objectUtils = require('./objectUtils')
 
 // 更新分支中的最新commit id（即，引用）
 // 注意：没有打算完成log功能，所以不会在logs中记录每个分支的全部commit记录
-function updateBranch({ updateToRef, hash }) {
+function updateBranch(updateToRef, hash) {
     // 获取该分支引用(ref)记录文件所在的相对路径
     const ref = getBranchPath(updateToRef)
 
@@ -18,7 +19,7 @@ function getBranchPath(ref) {
     // 如果是HEAD，则获取HEAD文件中记录的地址
     if (ref === 'HEAD') {
         const head = fs.readFileSync(
-            path.join(fileUtils.getAbsolutePathFromGitMary, 'HEAD'),
+            path.join(fileUtils.getAbsolutePathFromGitMary(), 'HEAD'),
             'utf8'
         )
         return head.replace('ref: ', '')
@@ -57,9 +58,26 @@ function writeBranchFile(path, content) {
     )
 }
 
+// 获取ref分支文件的内容，即最近一次commit id
+function getBranchLatestCommit(ref) {
+    // 该引用本身就是一个commit
+    if (objectUtils.existHash(ref)) {
+        return ref
+    }
+    // 获取该ref的相对路径
+    const relativePath = getBranchPath(ref)
+
+    // 获取前置的绝对路径
+    const absolutePath = fileUtils.getAbsolutePathFromGitMary(relativePath)
+
+    // 读取文件
+    return fileUtils.readFile(absolutePath)
+}
+
 module.exports = {
     updateBranch: updateBranch,
     getBranchPath: getBranchPath,
     isValidBranchPath: isValidBranchPath,
     writeBranchFile: writeBranchFile,
+    getBranchLatestCommit: getBranchLatestCommit,
 }
