@@ -18,7 +18,7 @@ function init() {
         // =》此时初始化为默认的master分支
         HEAD: 'ref: refs/heads/master',
 
-        // 文件夹：存放仓库中所有数据内容
+        // 文件夹：存放仓库中所有hash以及对应的原文内容
         objects: {},
 
         // 文件夹：存放所有git对象

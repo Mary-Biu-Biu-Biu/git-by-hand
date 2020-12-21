@@ -1,6 +1,7 @@
 // 用于创建文件/文件夹
 const fs = require('fs')
 const path = require('path')
+const otherUtils = require('./otherUtils')
 
 // 用于创建文件结构
 function writeFilesFromStructure(structure, prefix) {
@@ -76,18 +77,8 @@ function readFile(filepath) {
 }
 
 function writeSingleFile(filepath, content) {
-    // 生成文档路径结构（适配writeFilesFromStructure）
-    function createStructure(structure, array) {
-        if (array.length === 2) {
-            console.log(structure[1])
-            structure[array[0]] = array[1]
-        } else if (array.length > 2) {
-            structure[array[0]] = structure[array[0]] || {}
-            createStructure(structure[array[0]], array.slice(1))
-        }
-        return structure
-    }
-    let structure = createStructure(
+    // 把路径转换成structure结构
+    let structure = otherUtils.pathToStructure(
         {},
         filepath.split(path.sep).concat(content)
     )
