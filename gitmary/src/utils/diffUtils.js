@@ -1,12 +1,11 @@
 const objectUtils = require('./objectUtils')
-const indexUtils = require('./indexUtils')
 
 // 比较两个commit对应的文件区别
 function diff(currentCommit, targetCommit) {
     // 从commit转换成index
     let targetIndex = objectUtils.commitToIndex(targetCommit)
-    // 获取当前index（不带状态）
-    let currentIndex = indexUtils.getAllIndex(false)
+    // 获取当前commit的index
+    let currentIndex = objectUtils.commitToIndex(currentCommit)
     return indexDiff(currentIndex, targetIndex)
 }
 

@@ -1,9 +1,27 @@
 const gitmary = require('../gitmary/gitmary')
 
 // test
-gitmary.init()
-gitmary.add('fileToAdd.txt')
-gitmary.commit('first commit')
+// gitmary.init()
+// gitmary.add('fileToAdd.txt')
+// gitmary.commit('first commit') // first
+
+// gitmary.add('folderToAdd')
+// gitmary.add('fileToRemove2.txt')
+// // gitmary.rm('fileToRemove2.txt')
+// gitmary.commit('second commit') // second
+// gitmary.add('folderToAdd2')
+// gitmary.commit('third commit') // third
+// gitmary.branch('new-branch')
+// gitmary.add('2.txt')
+// gitmary.commit('forth commit')
+gitmary.checkout('52dab389')
+gitmary.checkout('6a7064d')
+
+// gitmary初始化已完成
+// commit successfully, id:620b5202
+// commit successfully, id:52dab389
+// commit successfully, id:66f08bbe
+// commit successfully, id:6a7064d
 
 // ----------------index-----------({文件地址：hashid})
 // {
@@ -38,19 +56,3 @@ gitmary.commit('first commit')
 
 // ------------commit hash-----------------
 // 38e3535d
-
-gitmary.add('folderToAdd')
-gitmary.add('fileToRemove2.txt')
-// gitmary.rm('fileToRemove2.txt')
-gitmary.commit('second commit')
-gitmary.add('folderToAdd2')
-gitmary.commit('third commit')
-gitmary.branch('new-branch')
-gitmary.add('fileAfterCommit.txt')
-gitmary.commit('forth commit')
-gitmary.checkout('212e8e9f')
-
-// gitmary初始化已完成
-// commit successfully, id:4f1c5d7a
-// commit successfully, id:212e8e9f
-// commit successfully, id:df9f782

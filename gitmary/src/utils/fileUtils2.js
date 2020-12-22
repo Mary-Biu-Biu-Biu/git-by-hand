@@ -102,7 +102,7 @@ function deleteFiles(filePaths) {
 
 // 根据diff获取的文件区分，更新目录
 function updateFromDiff(diffs) {
-    // 找到有变化的哪些文件
+    找到有变化的哪些文件
     let diffArr = Object.values(diffs)
     diffArr = diffArr.filter((item) => item.status !== 'SAME')
     diffArr.forEach((item) => {
@@ -110,7 +110,7 @@ function updateFromDiff(diffs) {
         let filepath = getAbsolutePathFromRoot(item.path)
         // 新增或修改的文件，重写
         if (item.status === 'A' || item.status === 'M') {
-            fs.writeFileSync(filepath, objectUtils.getContent(item.target))
+            writeSingleFile(filepath, objectUtils.getContent(item.target))
         }
         // 删除的文件，删除
         else if (item.status === 'D') {

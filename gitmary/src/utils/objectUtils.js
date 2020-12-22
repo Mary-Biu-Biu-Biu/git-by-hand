@@ -1,6 +1,7 @@
 const path = require('path')
 const fs = require('fs')
 const fileUtils = require('./fileUtils')
+const fileUtils2 = require('./fileUtils2')
 const otherUtils = require('./otherUtils')
 
 function saveObject(content) {
@@ -9,7 +10,7 @@ function saveObject(content) {
 
     // 获取objects目录中该hash的路径
     const objectPath = path.join(
-        fileUtils.getAbsolutePathFromGitMary('objects'),
+        fileUtils2.getAbsolutePathFromGitMary('objects'),
         hash
     )
 
@@ -23,17 +24,17 @@ function saveObject(content) {
 // 检查objects中是否存在目标hash对应的内容
 function existHash(hash) {
     return fs.existsSync(
-        path.join(fileUtils.getAbsolutePathFromGitMary('objects'), hash)
+        path.join(fileUtils2.getAbsolutePathFromGitMary('objects'), hash)
     )
 }
 
 // 根据hash，获取objects中存储对应的原文
 function getContent(hash) {
     let hashpath = path.join(
-        fileUtils.getAbsolutePathFromGitMary('objects'),
+        fileUtils2.getAbsolutePathFromGitMary('objects'),
         hash
     )
-    return fileUtils.readFile(hashpath)
+    return fileUtils2.readFile(hashpath)
 }
 
 // 把commit转换成原文

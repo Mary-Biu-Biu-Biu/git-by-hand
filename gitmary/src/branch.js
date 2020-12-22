@@ -9,6 +9,7 @@ module.exports.branch = (branchname) => {
 
     // 获取当前最新的commit
     let commit = refUtils.getBranchLatestCommit('HEAD')
+
     // 创建新的branch文件，并写入该commit
     refUtils.updateBranch(branchname, commit)
 }

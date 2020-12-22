@@ -28,6 +28,10 @@ function getBranchPath(ref) {
     else if (isValidBranchPath(ref)) {
         return ref
     }
+    // 用于checkout commit情况，更新head地址为commit
+    else if (objectUtils.existHash(ref)) {
+        return ref
+    }
     // 否则，添加prefix，转换为正确的相对路径格式
     else {
         return `refs/heads/${ref}`
@@ -63,6 +67,23 @@ function getBranchLatestCommit(ref) {
     // 该引用本身就是一个commit（用于checkout）
     if (objectUtils.existHash(ref)) {
         return ref
+    }
+
+    // 用于checkout: HEAD中存储的可能是commit id，也可能是branch位置
+    if (ref === 'HEAD') {
+        const head = fs.readFileSync(
+            path.join(fileUtils.getAbsolutePathFromGitMary(), 'HEAD'),
+            'utf8'
+        )
+        // 如果是分支，则返回分支中存储的最新的commit
+        // 否则，直接返回存储的commit
+        if (head.includes('refs')) {
+            return fileUtils.readFile(
+                fileUtils.getAbsolutePathFromGitMary(head.replace('ref: ', ''))
+            )
+        } else {
+            return head
+        }
     }
 
     // 获取该ref的相对路径

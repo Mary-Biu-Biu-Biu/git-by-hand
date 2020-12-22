@@ -1,8 +1,9 @@
 const refUtils = require('./utils/refUtils')
 const diffUtils = require('./utils/diffUtils')
 const indexUtils = require('./utils/indexUtils')
-
 const fileUtils = require('./utils/fileUtils')
+const objectUtils = require('./utils/objectUtils')
+const fs = require('fs')
 
 // 切换commit或者切换分支（也是）
 module.exports.checkout = (hash) => {
@@ -17,7 +18,13 @@ module.exports.checkout = (hash) => {
     )
 
     // 根据这些不同，把受影响的文件进行更新
-    fileUtils.rewriteFromDiff(diffs)
+    fileUtils.updateFromDiff(diffs)
 
-    // 更新HEAD文件中当前分支的最新commit
+    // 如果是回到commit，则HEAD更新为当前commit
+    if (objectUtils.existHash(hash)) {
+        fs.writeFileSync(fileUtils.getAbsolutePathFromGitMary('HEAD'), hash)
+    } else {
+        // 如果是回到branch，则HEAD更新为当前branch的path
+        refUtils.updateBranch('HEAD', refUtils.getBranchPath(hash))
+    }
 }
