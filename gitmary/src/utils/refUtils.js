@@ -60,10 +60,11 @@ function writeBranchFile(branchpath, commit) {
 
 // 获取ref分支文件的内容，即最近一次commit id
 function getBranchLatestCommit(ref) {
-    // 该引用本身就是一个commit
+    // 该引用本身就是一个commit（用于checkout）
     if (objectUtils.existHash(ref)) {
         return ref
     }
+
     // 获取该ref的相对路径
     const relativePath = getBranchPath(ref)
 

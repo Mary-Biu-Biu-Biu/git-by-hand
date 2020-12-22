@@ -2,6 +2,7 @@
 const fs = require('fs')
 const path = require('path')
 const otherUtils = require('./otherUtils')
+const objectUtils = require('./objectUtils')
 
 // 用于创建文件结构
 function writeFilesFromStructure(structure, prefix) {
@@ -77,6 +78,7 @@ function readFile(filepath) {
     return ''
 }
 
+// 写入一个单独文件
 function writeSingleFile(filepath, content) {
     // 把路径转换成structure结构
     let structure = otherUtils.pathToStructure(
@@ -85,13 +87,35 @@ function writeSingleFile(filepath, content) {
     )
 
     // 传过来的filepath已经是绝对路径了，所以这里不需要添加前面的路径
+    // 使用这个function是防止新文件的路径中有还没有创建的文件夹
     writeFilesFromStructure(structure, '/')
 }
 
-// 删除所有文件
+// 删除路径下所有文件
 function deleteFiles(filePaths) {
     filePaths.forEach((filepath) => {
         if (fs.existsSync(filepath)) {
+            fs.unlinkSync(filepath)
+        }
+    })
+}
+
+// 根据diff获取的文件区分，更新目录
+function rewriteFromDiff(diffs) {
+    // 找到有变化的哪些文件
+    let diffArr = Object.values(diffs)
+    diffArr = diffArr.filter((item) => item.status !== 'SAME')
+    diffArr.forEach((item) => {
+        // 获取文件的绝对路径
+        let filepath = getAbsolutePathFromRoot(item.path)
+
+        // 新增或修改的文件，重写
+        if (item.status === 'A' || item.status === 'M') {
+            writeSingleFile(filepath, objectUtils.getContent(item.target))
+        }
+
+        // 删除的文件，删除
+        else if (item.status === 'D') {
             fs.unlinkSync(filepath)
         }
     })
@@ -106,4 +130,5 @@ module.exports = {
     readFile: readFile,
     writeSingleFile: writeSingleFile,
     deleteFiles: deleteFiles,
+    rewriteFromDiff: rewriteFromDiff,
 }

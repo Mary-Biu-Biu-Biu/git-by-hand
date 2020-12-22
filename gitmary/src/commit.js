@@ -7,44 +7,51 @@ const path = require('path')
 
 // 提交
 module.exports.commit = (message) => {
-    // 把index对象转换为树，即文件夹层级通过key来表示
+    // 把index对象转换为树，即文件夹层级通过key来表示，比如：
+    // {
+    //     file1: 'hash1',
+    //     path: {
+    //         file2: 'hash2',
+    //     },
+    // }
     const index = indexUtils.getAllIndex(false)
+    // console.log('---index-----\n')
+    // console.log(index)
     const tree = Object.keys(index).reduce(function (tree, wholePath) {
         return otherUtils.pathToStructure(
             tree,
             wholePath.split(path.sep).concat(index[wholePath])
         )
     }, {})
-    console.log(tree)
+    // console.log('---tree-----\n')
+    // console.log(tree)
 
     function stringTree(tree) {
         var treeString =
             Object.keys(tree)
                 .map(function (key) {
                     if (typeof tree[key] === 'string') {
-                        return 'blob ' + tree[key] + ' ' + key
+                        return '*file* ' + tree[key] + ' ' + key
                     } else {
-                        return 'tree ' + stringTree(tree[key]) + ' ' + key
+                        return '*folder* ' + stringTree(tree[key]) + ' ' + key
                     }
                 })
                 .join('\n') + '\n'
+        // console.log('---tree string-----\n' + treeString)
 
-        return treeString
+        return objectUtils.saveObject(treeString)
     }
 
-    // index中所有文件转换成一个string
-    let treeString = stringTree(tree)
-    console.log(treeString)
     // 计算树的hash
-    const treeHash = objectUtils.saveObject(treeString)
-    console.log(treeHash)
+    let treeHash = stringTree(tree)
+    // console.log('---tree hash-----\n' + treeHash)
 
     // 读取“HEAD”文件中当前的branch中记录的commit
     let lastCommit = [refUtils.getBranchLatestCommit('HEAD')]
 
     // 完整的commit记录
     let commitString =
-        // commit和对应hash id
+        // commit和所有文件内容的hash
         'commit ' +
         treeHash +
         '\n' +
@@ -58,16 +65,16 @@ module.exports.commit = (message) => {
         'Date:  ' +
         new Date().toString() +
         '\n' +
-        '\n' +
         // commit信息
-        '    ' +
+        'message: ' +
         message +
         '\n'
+    // console.log('---commit string-----\n' + commitString)
 
-    console.log(commitString)
     // 对commit进行hash，并把hash内容保存到objects中
     const commitHash = objectUtils.saveObject(commitString)
 
     // 更新refs的指向
     refUtils.updateBranch('HEAD', commitHash)
+    console.log('commit successfully, id:' + commitHash)
 }
