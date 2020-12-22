@@ -32,7 +32,7 @@ module.exports.commit = (message) => {
         return treeString
     }
 
-    // 转换成string
+    // index中所有文件转换成一个string
     let treeString = stringTree(tree)
     console.log(treeString)
     // 计算树的hash

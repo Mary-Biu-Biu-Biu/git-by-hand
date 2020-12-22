@@ -8,3 +8,4 @@ gitmary.add('fileToRemove2.txt')
 // gitmary.rm('fileToRemove2.txt')
 
 gitmary.commit('first commit')
+gitmary.branch('new-branch')

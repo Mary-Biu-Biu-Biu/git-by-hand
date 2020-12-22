@@ -6,12 +6,12 @@ const objectUtils = require('./objectUtils')
 
 // 更新分支中的最新commit id（即，引用）
 // 注意：没有打算完成log功能，所以不会在logs中记录每个分支的全部commit记录
-function updateBranch(updateToRef, hash) {
+function updateBranch(updateToRef, commit) {
     // 获取该分支引用(ref)记录文件所在的相对路径
     const ref = getBranchPath(updateToRef)
 
     // 更新该ref（分支）中所记录的内容
-    writeBranchFile(ref, hash)
+    writeBranchFile(ref, commit)
 }
 
 // 获取分支记录文件的相对路径
@@ -45,11 +45,11 @@ function isValidBranchPath(ref) {
 }
 
 // 重写该branch的引用文件记录
-function writeBranchFile(path, content) {
+function writeBranchFile(branchpath, commit) {
     // 把该ref文件路径+文本内容转换为structure结构
     const structure = otherUtils.pathToStructure(
         {},
-        path.split('/').concat(content)
+        branchpath.split('/').concat(commit)
     )
     // 并在路径中写入内容
     fileUtils.writeFilesFromStructure(
