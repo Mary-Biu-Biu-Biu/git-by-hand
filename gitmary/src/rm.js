@@ -17,5 +17,5 @@ module.exports.rm = (filepath) => {
     }
 
     // 删除本地文件
-    // fileUtils.deleteFiles(filePaths)
+    fileUtils.deleteFiles(filePaths)
 }

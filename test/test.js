@@ -1,13 +1,13 @@
 const gitmary = require('../gitmary/gitmary')
 
-// test
+/* test */
 // gitmary.init()
 // gitmary.add('fileToAdd.txt')
 // gitmary.commit('first commit') // first
 
 // gitmary.add('folderToAdd')
 // gitmary.add('fileToRemove2.txt')
-// // gitmary.rm('fileToRemove2.txt')
+// gitmary.rm('fileToRemove2.txt')
 // gitmary.commit('second commit') // second
 // gitmary.add('folderToAdd2')
 // gitmary.commit('third commit') // third
