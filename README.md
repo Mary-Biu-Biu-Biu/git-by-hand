@@ -36,6 +36,7 @@
 >>>> ├── indexUtils.js：用于对暂存区的处理  
 >>>> ├── objectUtils.js：用于对hash和对应内容的管理  
 >>>> └── otherUtils.js：用于git逻辑体系外的操作，比如计算hash  
+
 >> └── gitmary.js：导出gitmary支持的功能，包括 init/add/rm/commit/branch/checkout  
 > ### test  
 >> ├── .gitmary：测试文件运行出来的仓库配置等文件  
