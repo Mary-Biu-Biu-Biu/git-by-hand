@@ -24,7 +24,7 @@
 ## 文件结构
 > ### gitmary  
 >> └── src：实现gitmary的具体文件
->>> ├── add.js：添加文件到暂存区，或把路径下所有文件添加到暂存区
+>>> ├── add.js：添加文件到暂存区，或把路径下所有文件添加到暂存区  
 >>> ├── branch.js：创建新的分支  
 >>> ├── checkout.js：切换到特定commit或者branch的最新commit状态  
 >>> ├── commit.js：提交当前暂存区内的全部修改  
