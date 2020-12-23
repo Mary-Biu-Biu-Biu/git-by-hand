@@ -23,22 +23,20 @@
 
 ## 文件结构
 > ### gitmary  
-    >> └── src：实现gitmary的具体文件
-    >>>    ├── add.js：添加文件到暂存区，或把路径下所有文件添加到暂存区
-    >>>    ├── branch.js：创建新的分支  
-    >>>    ├── checkout.js：切换到特定commit或者branch的最新commit状态  
-    >>>    ├── commit.js：提交当前暂存区内的全部修改  
-    >>>    ├── init.js：在目标路径下创建初始文件夹  
-    >>>    ├── rm.js：删除暂存区记录和原始目标文件或路径下所有文件  
-    >>>    └── utils  
-    >>>>    ├── diffUtils.js：用于计算两个commit之间文件的差异  
-    >>>>        ├── fileUtils.js：对文件的操作，如递归创建所有的文件夹+文件，根据diff结果更新所有仓库文件，获取路径下所有文件等。  
-    >>>>        ├── indexUtils.js：用于对暂存区的处理  
-    >>>>        ├── objectUtils.js：用于对hash和对应内容的管理  
-    >>>>        └── otherUtils.js：用于git逻辑体系外的操作，比如计算hash  
-
+>> └── src：实现gitmary的具体文件
+>>> ├── add.js：添加文件到暂存区，或把路径下所有文件添加到暂存区
+>>> ├── branch.js：创建新的分支  
+>>> ├── checkout.js：切换到特定commit或者branch的最新commit状态  
+>>> ├── commit.js：提交当前暂存区内的全部修改  
+>>> ├── init.js：在目标路径下创建初始文件夹  
+>>> ├── rm.js：删除暂存区记录和原始目标文件或路径下所有文件  
+>>> └── utils  
+>>>> ├── diffUtils.js：用于计算两个commit之间文件的差异  
+>>>> ├── fileUtils.js：对文件的操作，如递归创建所有的文件夹+文件，根据diff结果更新所有仓库文件，获取路径下所有文件等。  
+>>>> ├── indexUtils.js：用于对暂存区的处理  
+>>>> ├── objectUtils.js：用于对hash和对应内容的管理  
+>>>> └── otherUtils.js：用于git逻辑体系外的操作，比如计算hash  
 >> └── gitmary.js：导出gitmary支持的功能，包括 init/add/rm/commit/branch/checkout  
-
 > ### test  
-    >> ├── .gitmary：测试文件运行出来的仓库配置等文件  
-    >> └── test.js：用于执行测试的文件  
+>> ├── .gitmary：测试文件运行出来的仓库配置等文件  
+>> └── test.js：用于执行测试的文件  
