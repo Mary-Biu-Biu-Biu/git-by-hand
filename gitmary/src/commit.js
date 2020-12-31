@@ -15,16 +15,12 @@ module.exports.commit = (message) => {
     //     },
     // }
     const index = indexUtils.getAllIndex(false)
-    // console.log('---index-----\n')
-    // console.log(index)
     const tree = Object.keys(index).reduce(function (tree, wholePath) {
         return otherUtils.pathToStructure(
             tree,
             wholePath.split(path.sep).concat(index[wholePath])
         )
     }, {})
-    // console.log('---tree-----\n')
-    // console.log(tree)
 
     function stringTree(tree) {
         var treeString =
@@ -37,14 +33,12 @@ module.exports.commit = (message) => {
                     }
                 })
                 .join('\n') + '\n'
-        // console.log('---tree string-----\n' + treeString)
 
         return objectUtils.saveObject(treeString)
     }
 
     // 计算树的hash
     let treeHash = stringTree(tree)
-    // console.log('---tree hash-----\n' + treeHash)
 
     // 读取“HEAD”文件中当前的branch中记录的commit
     let lastCommit = [refUtils.getBranchLatestCommit('HEAD')]
@@ -69,7 +63,6 @@ module.exports.commit = (message) => {
         'message: ' +
         message +
         '\n'
-    // console.log('---commit string-----\n' + commitString)
 
     // 对commit进行hash，并把hash内容保存到objects中
     const commitHash = objectUtils.saveObject(commitString)
